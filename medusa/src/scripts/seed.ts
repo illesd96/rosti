@@ -358,7 +358,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
   // Check if pickup fulfillment set already exists
   let pickupFulfillmentSet;
-  const existingPickupFulfillmentSets = existingFulfillmentSets.filter(fs => fs.name === 'Store pickup');
+  const currentFulfillmentSets = await fulfillmentModuleService.listFulfillmentSets({});
+  const existingPickupFulfillmentSets = currentFulfillmentSets.filter(fs => fs.name === 'Store pickup');
   
   if (existingPickupFulfillmentSets.length === 0) {
     pickupFulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({

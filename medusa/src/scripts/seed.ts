@@ -356,8 +356,12 @@ export default async function seedDemoData({ container }: ExecArgs) {
     logger.info('Skipping shipping options creation - no service zones available.');
   }
 
-  const pickupFulfillmentSet =
-    await fulfillmentModuleService.createFulfillmentSets({
+  // Check if pickup fulfillment set already exists
+  let pickupFulfillmentSet;
+  const existingPickupFulfillmentSets = existingFulfillmentSets.filter(fs => fs.name === 'Store pickup');
+  
+  if (existingPickupFulfillmentSets.length === 0) {
+    pickupFulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
       name: 'Store pickup',
       type: 'pickup',
       service_zones: [
@@ -376,6 +380,11 @@ export default async function seedDemoData({ container }: ExecArgs) {
         },
       ],
     });
+    logger.info('Created new pickup fulfillment set.');
+  } else {
+    pickupFulfillmentSet = existingPickupFulfillmentSets[0];
+    logger.info('Using existing pickup fulfillment set.');
+  }
 
   await remoteLink.create({
     [Modules.STOCK_LOCATION]: {
@@ -857,8 +866,12 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
     },
   });
 
-  const materials: MaterialModelType[] =
-    await fashionModuleService.createMaterials([
+  // Check if materials already exist
+  const existingMaterials = await fashionModuleService.listMaterials();
+  
+  let materials: MaterialModelType[];
+  if (existingMaterials.length === 0) {
+    materials = await fashionModuleService.createMaterials([
       {
         name: 'Velvet',
       },
@@ -875,8 +888,17 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
         name: 'Microfiber',
       },
     ]);
+    logger.info('Created new materials.');
+  } else {
+    materials = existingMaterials;
+    logger.info('Using existing materials.');
+  }
 
-  await fashionModuleService.createColors([
+  // Check if colors already exist
+  const existingColors = await fashionModuleService.listColors();
+  
+  if (existingColors.length === 0) {
+    await fashionModuleService.createColors([
     // Velvet
     {
       name: 'Black',
@@ -958,33 +980,41 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
       material_id: materials.find((m) => m.name === 'Leather').id,
     },
   ]);
+    logger.info('Created new colors.');
+  } else {
+    logger.info('Colors already exist, skipping.');
+  }
 
-  const astridCurveImages = await uploadFilesWorkflow(container)
-    .run({
-      input: {
-        files: [
-          {
-            access: 'public',
-            filename: 'astrid-curve.png',
-            mimeType: 'image/png',
-            content: await getImageUrlContent(
-              'https://assets.agilo.com/fashion-starter/products/astrid-curve/image.png',
-            ),
-          },
-          {
-            access: 'public',
-            filename: 'astrid-curve-2.png',
-            mimeType: 'image/png',
-            content: await getImageUrlContent(
-              'https://assets.agilo.com/fashion-starter/products/astrid-curve/image1.png',
-            ),
-          },
-        ],
-      },
-    })
-    .then((res) => res.result);
+  // Check if products already exist
+  const existingProducts = await container.resolve(Modules.PRODUCT).listProducts({});
+  
+  if (existingProducts.length === 0) {
+    const astridCurveImages = await uploadFilesWorkflow(container)
+      .run({
+        input: {
+          files: [
+            {
+              access: 'public',
+              filename: 'astrid-curve.png',
+              mimeType: 'image/png',
+              content: await getImageUrlContent(
+                'https://assets.agilo.com/fashion-starter/products/astrid-curve/image.png',
+              ),
+            },
+            {
+              access: 'public',
+              filename: 'astrid-curve-2.png',
+              mimeType: 'image/png',
+              content: await getImageUrlContent(
+                'https://assets.agilo.com/fashion-starter/products/astrid-curve/image1.png',
+              ),
+            },
+          ],
+        },
+      })
+      .then((res) => res.result);
 
-  await createProductsWorkflow(container).run({
+    await createProductsWorkflow(container).run({
     input: {
       products: [
         {
@@ -2726,6 +2756,10 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
       ],
     },
   });
+    logger.info('Created new products.');
+  } else {
+    logger.info('Products already exist, skipping product creation.');
+  }
 
   logger.info('Finished seeding product data.');
 }

@@ -3,11 +3,6 @@ const { loadEnv, defineConfig } = require('@medusajs/framework/utils');
 loadEnv(process.env.NODE_ENV, process.cwd());
 
 module.exports = defineConfig({
-  // admin: {
-  //   backendUrl:
-  //     process.env.BACKEND_URL ?? 'https://sofa-society-starter.medusajs.app',
-  //   storefrontUrl: process.env.STOREFRONT_URL,
-  // },
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,

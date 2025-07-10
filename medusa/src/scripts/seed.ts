@@ -81,19 +81,30 @@ export default async function seedDemoData({ container }: ExecArgs) {
   }
 
   logger.info('Seeding region data...');
-  const { result: regionResult } = await createRegionsWorkflow(container).run({
-    input: {
-      regions: [
-        {
-          name: 'Europe',
-          currency_code: 'eur',
-          countries,
-          payment_providers: [],
-        },
-      ],
-    },
-  });
-  const region = regionResult[0];
+  
+  // Check if regions already exist
+  const existingRegions = await container.resolve(Modules.REGION).listRegions();
+  
+  let region;
+  if (existingRegions.length === 0) {
+    const { result: regionResult } = await createRegionsWorkflow(container).run({
+      input: {
+        regions: [
+          {
+            name: 'Europe',
+            currency_code: 'eur',
+            countries,
+            payment_providers: [],
+          },
+        ],
+      },
+    });
+    region = regionResult[0];
+    logger.info('Created new region.');
+  } else {
+    region = existingRegions[0];
+    logger.info('Using existing region.');
+  }
   logger.info('Finished seeding regions.');
 
   await updateStoresWorkflow(container).run({
@@ -116,11 +127,20 @@ export default async function seedDemoData({ container }: ExecArgs) {
   });
 
   logger.info('Seeding tax regions...');
-  await createTaxRegionsWorkflow(container).run({
-    input: countries.map((country_code) => ({
-      country_code,
-    })),
-  });
+  
+  // Check if tax regions already exist
+  const existingTaxRegions = await container.resolve(Modules.TAX).listTaxRegions();
+  
+  if (existingTaxRegions.length === 0) {
+    await createTaxRegionsWorkflow(container).run({
+      input: countries.map((country_code) => ({
+        country_code,
+      })),
+    });
+    logger.info('Created new tax regions.');
+  } else {
+    logger.info('Tax regions already exist, skipping.');
+  }
   logger.info('Finished seeding tax regions.');
 
   logger.info('Seeding stock location data...');

@@ -20,19 +20,23 @@ module.exports = defineConfig({
     },
   },
   modules: [
+    {
+      resolve: '@medusajs/medusa/payment',
+      options: {
+        providers: [
+          {
+            id: 'manual',
+            resolve: '@medusajs/medusa-payment-manual',
+            options: {},
+          },
+        ],
+      },
+    },
     // {
-    //   resolve: '@medusajs/medusa/payment',
+    //   resolve: '@medusajs/medusa/payment-stripe',
     //   options: {
-    //     providers: [
-    //       {
-    //         id: 'stripe',
-    //         resolve: '@medusajs/medusa/payment-stripe',
-    //         options: {
-    //           apiKey: process.env.STRIPE_API_KEY,
-    //           webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-    //         },
-    //       },
-    //     ],
+    //     apiKey: process.env.STRIPE_API_KEY,
+    //     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     //   },
     // },
     {

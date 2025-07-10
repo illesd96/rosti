@@ -20,18 +20,18 @@ module.exports = defineConfig({
     },
   },
   modules: [
-    {
-      resolve: '@medusajs/medusa/payment',
-      options: {
-        providers: [
-          {
-            id: 'manual',
-            resolve: '@medusajs/payment-manual',
-            options: {},
-          },
-        ],
-      },
-    },
+    // {
+    //   resolve: '@medusajs/medusa/payment',
+    //   options: {
+    //     providers: [
+    //       {
+    //         id: 'manual',
+    //         resolve: '@medusajs/payment-manual',
+    //         options: {},
+    //       },
+    //     ],
+    //   },
+    // },
     // {
     //   resolve: '@medusajs/medusa/payment-stripe',
     //   options: {

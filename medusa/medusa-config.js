@@ -20,21 +20,21 @@ module.exports = defineConfig({
     },
   },
   modules: [
-    {
-      resolve: '@medusajs/medusa/payment',
-      options: {
-        providers: [
-          {
-            id: 'stripe',
-            resolve: '@medusajs/medusa/payment-stripe',
-            options: {
-              apiKey: process.env.STRIPE_API_KEY,
-              webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-            },
-          },
-        ],
-      },
-    },
+    // {
+    //   resolve: '@medusajs/medusa/payment',
+    //   options: {
+    //     providers: [
+    //       {
+    //         id: 'stripe',
+    //         resolve: '@medusajs/medusa/payment-stripe',
+    //         options: {
+    //           apiKey: process.env.STRIPE_API_KEY,
+    //           webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+    //         },
+    //       },
+    //     ],
+    //   },
+    // },
     {
       resolve: './src/modules/fashion',
     },

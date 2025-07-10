@@ -276,7 +276,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         name: 'Standard Shipping',
         price_type: 'flat',
         provider_id: 'manual_manual',
-        service_zone_id: fulfillmentSet.service_zones[0].id,
+        service_zone_id: fulfillmentSet?.service_zones?.[0]?.id,
         shipping_profile_id: shippingProfile.id,
         type: {
           label: 'Standard',
@@ -314,7 +314,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         name: 'Express Shipping',
         price_type: 'flat',
         provider_id: 'manual_manual',
-        service_zone_id: fulfillmentSet.service_zones[0].id,
+        service_zone_id: fulfillmentSet?.service_zones?.[0]?.id,
         shipping_profile_id: shippingProfile.id,
         type: {
           label: 'Express',
@@ -387,7 +387,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         name: 'Denmark Store Pickup',
         price_type: 'flat',
         provider_id: 'manual_manual',
-        service_zone_id: pickupFulfillmentSet.service_zones[0].id,
+        service_zone_id: pickupFulfillmentSet?.service_zones?.[0]?.id,
         shipping_profile_id: shippingProfile.id,
         type: {
           label: 'Denmark Store Pickup',
@@ -773,7 +773,7 @@ This collection brings the essence of Scandinavian elegance to your living room.
             product_page_cta_heading:
               "The 'Name of sofa' embodies Scandinavian minimalism with clean lines and a soft, neutral palette.",
             product_page_cta_link:
-              'See more out of ‘Scandinavian Simplicity’ collection',
+              'See more out of 'Scandinavian Simplicity' collection',
           },
         },
         {
@@ -795,7 +795,7 @@ Elevate your space with timeless beauty.`,
             product_page_cta_image: modernLuxeProductPageCtaImage,
             product_page_cta_heading:
               "The 'Name of sofa' is a masterpiece of minimalism and luxury.",
-            product_page_cta_link: 'See more out of ‘Modern Luxe’ collection',
+            product_page_cta_link: 'See more out of 'Modern Luxe' collection',
           },
         },
         {
@@ -810,14 +810,14 @@ Elevate your space with timeless beauty.`,
               'Boho Chic: Relaxed, eclectic style with a touch of free-spirited charm',
             collection_page_content: `Infused with playful textures and vibrant patterns, this collection embodies relaxed, eclectic vibes. Soft fabrics and creative designs add warmth and personality to any room.
 
-It’s comfort with a bold, carefree spirit.`,
+It's comfort with a bold, carefree spirit.`,
             product_page_heading: 'Collection Inspired Interior',
             product_page_image: bohoChicProductPageImage,
             product_page_wide_image: bohoChicProductPageWideImage,
             product_page_cta_image: bohoChicProductPageCtaImage,
             product_page_cta_heading:
               "The 'Name of sofa' captures the essence of boho style with its relaxed, oversized form and eclectic fabric choices.",
-            product_page_cta_link: 'See more out of ‘Boho Chic’ collection',
+            product_page_cta_link: 'See more out of 'Boho Chic' collection',
           },
         },
         {
@@ -840,7 +840,7 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
             product_page_cta_heading:
               "The 'Name of sofa' brings a touch of traditional charm with its elegant curves and classic silhouette",
             product_page_cta_link:
-              'See more out of ‘Timeless Classics’ collection',
+              'See more out of 'Timeless Classics' collection',
           },
         },
       ],
@@ -1404,7 +1404,7 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
           title: 'Havenhill Estate',
           handle: 'havenhill-estate',
           description:
-            'The Havenhill Estate brings a touch of traditional charm with its elegant curves and classic silhouette. Upholstered in durable, luxurious fabric, it’s a timeless piece that combines comfort and style, fitting seamlessly into any sophisticated home.',
+            'The Havenhill Estate brings a touch of traditional charm with its elegant curves and classic silhouette. Upholstered in durable, luxurious fabric, it's a timeless piece that combines comfort and style, fitting seamlessly into any sophisticated home.',
           category_ids: [
             categoryResult.find((cat) => cat.name === 'One seater').id,
           ],
@@ -1625,7 +1625,7 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
           title: 'Nordic Breeze',
           handle: 'nordic-breeze',
           description:
-            'The Nordic Breeze is a refined expression of Scandinavian minimalism, with its crisp silhouette and airy aesthetic. Crafted for both comfort and simplicity, it’s perfect for creating a serene living space.',
+            'The Nordic Breeze is a refined expression of Scandinavian minimalism, with its crisp silhouette and airy aesthetic. Crafted for both comfort and simplicity, it's perfect for creating a serene living space.',
           category_ids: [
             categoryResult.find((cat) => cat.name === 'One seater').id,
           ],
@@ -2209,7 +2209,7 @@ Perfect for creating a warm, inviting atmosphere that never goes out of style.`,
           title: 'Savannah Grove',
           handle: 'savannah-grove',
           description:
-            'The Savannah Grove captures the essence of boho style with its relaxed, oversized form and eclectic fabric choices. Designed for both comfort and personality, it’s the ideal piece for those who seek a cozy, free-spirited vibe in their living spaces.',
+            'The Savannah Grove captures the essence of boho style with its relaxed, oversized form and eclectic fabric choices. Designed for both comfort and personality, it's the ideal piece for those who seek a cozy, free-spirited vibe in their living spaces.',
           category_ids: [
             categoryResult.find((cat) => cat.name === 'One seater').id,
           ],

@@ -3,7 +3,7 @@ services:
     name: medusa-backend
     env: node
     plan: free
-    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate && medusa build
+    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate && yarn medusa build
     startCommand: medusa start --skip-seed
     envVars:
       - key: NODE_ENV

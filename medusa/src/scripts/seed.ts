@@ -270,14 +270,16 @@ export default async function seedDemoData({ container }: ExecArgs) {
     },
   });
 
-  await createShippingOptionsWorkflow(container).run({
-    input: [
-      {
-        name: 'Standard Shipping',
-        price_type: 'flat',
-        provider_id: 'manual_manual',
-        service_zone_id: fulfillmentSet?.service_zones?.[0]?.id,
-        shipping_profile_id: shippingProfile.id,
+  // Only create shipping options if fulfillment set has service zones
+  if (fulfillmentSet?.service_zones?.[0]?.id) {
+    await createShippingOptionsWorkflow(container).run({
+      input: [
+        {
+          name: 'Standard Shipping',
+          price_type: 'flat',
+          provider_id: 'manual_manual',
+          service_zone_id: fulfillmentSet.service_zones[0].id,
+          shipping_profile_id: shippingProfile.id,
         type: {
           label: 'Standard',
           description: 'Ship in 2-3 days.',
@@ -314,42 +316,45 @@ export default async function seedDemoData({ container }: ExecArgs) {
         name: 'Express Shipping',
         price_type: 'flat',
         provider_id: 'manual_manual',
-        service_zone_id: fulfillmentSet?.service_zones?.[0]?.id,
-        shipping_profile_id: shippingProfile.id,
-        type: {
-          label: 'Express',
-          description: 'Ship in 24 hours.',
-          code: 'express',
+          service_zone_id: fulfillmentSet.service_zones[0].id,
+          shipping_profile_id: shippingProfile.id,
+          type: {
+            label: 'Express',
+            description: 'Ship in 24 hours.',
+            code: 'express',
+          },
+          prices: [
+            {
+              currency_code: 'usd',
+              amount: 10,
+            },
+            {
+              currency_code: 'eur',
+              amount: 10,
+            },
+            {
+              region_id: region.id,
+              amount: 10,
+            },
+          ],
+          rules: [
+            {
+              attribute: 'enabled_in_store',
+              value: '"true"',
+              operator: 'eq',
+            },
+            {
+              attribute: 'is_return',
+              value: 'false',
+              operator: 'eq',
+            },
+          ],
         },
-        prices: [
-          {
-            currency_code: 'usd',
-            amount: 10,
-          },
-          {
-            currency_code: 'eur',
-            amount: 10,
-          },
-          {
-            region_id: region.id,
-            amount: 10,
-          },
-        ],
-        rules: [
-          {
-            attribute: 'enabled_in_store',
-            value: '"true"',
-            operator: 'eq',
-          },
-          {
-            attribute: 'is_return',
-            value: 'false',
-            operator: 'eq',
-          },
-        ],
-      },
-    ],
-  });
+      ],
+    });
+  } else {
+    logger.info('Skipping shipping options creation - no service zones available.');
+  }
 
   const pickupFulfillmentSet =
     await fulfillmentModuleService.createFulfillmentSets({
@@ -381,14 +386,16 @@ export default async function seedDemoData({ container }: ExecArgs) {
     },
   });
 
-  await createShippingOptionsWorkflow(container).run({
-    input: [
-      {
-        name: 'Denmark Store Pickup',
-        price_type: 'flat',
-        provider_id: 'manual_manual',
-        service_zone_id: pickupFulfillmentSet?.service_zones?.[0]?.id,
-        shipping_profile_id: shippingProfile.id,
+  // Only create pickup shipping options if pickup fulfillment set has service zones
+  if (pickupFulfillmentSet?.service_zones?.[0]?.id) {
+    await createShippingOptionsWorkflow(container).run({
+      input: [
+        {
+          name: 'Denmark Store Pickup',
+          price_type: 'flat',
+          provider_id: 'manual_manual',
+          service_zone_id: pickupFulfillmentSet.service_zones[0].id,
+          shipping_profile_id: shippingProfile.id,
         type: {
           label: 'Denmark Store Pickup',
           description: 'Free in-store pickup.',
@@ -423,6 +430,9 @@ export default async function seedDemoData({ container }: ExecArgs) {
       },
     ],
   });
+  } else {
+    logger.info('Skipping pickup shipping options creation - no service zones available.');
+  }
 
   logger.info('Finished seeding fulfillment data.');
 

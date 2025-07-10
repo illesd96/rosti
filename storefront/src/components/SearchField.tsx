@@ -115,10 +115,10 @@ export const SearchField: React.FC<{
       <Button
         onPress={buttonPressHandle}
         variant="ghost"
-        className="p-1 max-md:text-white group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black"
+        className="p-1 text-[#f08c43]"
         aria-label="Open search"
       >
-        <Icon name="search" className="w-5 h-5" />
+        <Icon name="search" className="w-5 h-5 text-[#f08c43]" />
       </Button>
       <ReactAria.ComboBox
         allowsCustomValue

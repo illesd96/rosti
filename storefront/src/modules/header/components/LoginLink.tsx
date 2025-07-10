@@ -12,10 +12,10 @@ const LoginLink = ({ className }: { className: string }) => {
       href={customer ? "/account" : "/auth/login"}
       prefetch={false}
       variant="ghost"
-      className={className}
+      className={className + " text-[#f08c43]"}
       aria-label="Open account"
     >
-      <Icon name="user" className="w-6 h-6" />
+      <Icon name="user" className="w-6 h-6 text-[#f08c43]" />
     </LocalizedButtonLink>
   )
 }

@@ -40,12 +40,12 @@ export const Header: React.FC = async () => {
           <LayoutColumn>
             <div className="flex justify-between items-center h-18 md:h-21">
               <h1 className="font-medium text-md">
-                <LocalizedLink href="/">SofaSocietyCo.</LocalizedLink>
+                <LocalizedLink href="/">Rosti</LocalizedLink>
               </h1>
               <div className="flex items-center gap-8 max-md:hidden">
-                <LocalizedLink href="/about">About</LocalizedLink>
+                {/* <LocalizedLink href="/about">About</LocalizedLink>
                 <LocalizedLink href="/inspiration">Inspiration</LocalizedLink>
-                <LocalizedLink href="/store">Shop</LocalizedLink>
+                <LocalizedLink href="/store">Shop</LocalizedLink> */}
               </div>
               <div className="flex items-center gap-3 lg:gap-6 max-md:hidden">
                 <RegionSwitcher
@@ -57,12 +57,12 @@ export const Header: React.FC = async () => {
                 <React.Suspense>
                   <SearchField countryOptions={countryOptions} />
                 </React.Suspense>
-                <LoginLink className="p-1 group-data-[light=true]:md:text-white group-data-[sticky=true]:md:text-black" />
-                <CartDrawer />
+                <LoginLink className="p-1" />
+                <span style={{ color: "#f08c43" }}><CartDrawer /></span>
               </div>
               <div className="flex items-center gap-4 md:hidden">
-                <LoginLink className="p-1 group-data-[light=true]:md:text-white" />
-                <CartDrawer />
+                <LoginLink className="p-1" />
+                <span style={{ color: "#f08c43" }}><CartDrawer /></span>
                 <React.Suspense>
                   <HeaderDrawer countryOptions={countryOptions} />
                 </React.Suspense>

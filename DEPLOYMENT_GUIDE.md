@@ -226,3 +226,66 @@ Once deployed, you should have:
 - ✅ Storefront accessible
 
 Your e-commerce site is now live! 🚀 
+
+---
+
+## How to Fix
+
+### **Option 1: Disable S3 File Provider (Recommended for Now)**
+If you don’t need file uploads (images, etc.) right now, you can comment out or remove the S3 provider in your `medusa-config.js`.
+
+#### Edit `medusa/medusa-config.js`:
+Comment out or remove this section:
+```js
+{
+  resolve: '@medusajs/medusa/file',
+  options: {
+    providers: [
+      {
+        resolve: '@medusajs/medusa/file-s3',
+        id: 's3',
+        options: {
+          file_url: process.env.S3_FILE_URL,
+          access_key_id: process.env.S3_ACCESS_KEY_ID,
+          secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+          region: process.env.S3_REGION,
+          bucket: process.env.S3_BUCKET,
+          endpoint: process.env.S3_ENDPOINT,
+          additional_client_config: {
+            forcePathStyle:
+              process.env.S3_FORCE_PATH_STYLE === 'true' ? true : undefined,
+          },
+        },
+      },
+    ],
+  },
+},
+```
+Or, simply comment it out like this:
+```js
+<code_block_to_apply_changes_from>
+```
+
+---
+
+### **Option 2: Provide S3 Credentials**
+If you want to use S3, add the following environment variables in Render:
+- `S3_FILE_URL`
+- `S3_ACCESS_KEY_ID`
+- `S3_SECRET_ACCESS_KEY`
+- `S3_REGION`
+- `S3_BUCKET`
+- `S3_ENDPOINT` (optional)
+- `S3_FORCE_PATH_STYLE` (optional)
+
+---
+
+## What to Do Next
+
+1. **Comment out or remove the S3 file provider in your config.**
+2. **Commit and push the change to GitHub.**
+3. **Redeploy your backend on Render.**
+
+This should resolve the error and allow your backend to start.
+
+Let me know when you’ve done this or if you want the exact code to copy-paste! 

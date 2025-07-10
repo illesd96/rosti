@@ -3,7 +3,7 @@ services:
     name: medusa-backend
     env: node
     plan: free
-    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate && npx medusa build
+    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate
     startCommand: medusa start --skip-seed
     envVars:
       - key: NODE_ENV
@@ -31,6 +31,8 @@ services:
         value: https://your-admin-url.com
       - key: AUTH_CORS
         value: https://your-storefront-url.com
+      - key: DISABLE_ADMIN
+        value: true
 
 databases:
   - name: medusa-postgres

@@ -144,23 +144,34 @@ export default async function seedDemoData({ container }: ExecArgs) {
   logger.info('Finished seeding tax regions.');
 
   logger.info('Seeding stock location data...');
-  const { result: stockLocationResult } = await createStockLocationsWorkflow(
-    container,
-  ).run({
-    input: {
-      locations: [
-        {
-          name: 'European Warehouse',
-          address: {
-            city: 'Copenhagen',
-            country_code: 'DK',
-            address_1: '',
+  
+  // Check if stock locations already exist
+  const existingStockLocations = await container.resolve(Modules.STOCK_LOCATION).listStockLocations({});
+  
+  let stockLocation;
+  if (existingStockLocations.length === 0) {
+    const { result: stockLocationResult } = await createStockLocationsWorkflow(
+      container,
+    ).run({
+      input: {
+        locations: [
+          {
+            name: 'European Warehouse',
+            address: {
+              city: 'Copenhagen',
+              country_code: 'DK',
+              address_1: '',
+            },
           },
-        },
-      ],
-    },
-  });
-  const stockLocation = stockLocationResult[0];
+        ],
+      },
+    });
+    stockLocation = stockLocationResult[0];
+    logger.info('Created new stock location.');
+  } else {
+    stockLocation = existingStockLocations[0];
+    logger.info('Using existing stock location.');
+  }
 
   await remoteLink.create({
     [Modules.STOCK_LOCATION]: {
@@ -172,62 +183,83 @@ export default async function seedDemoData({ container }: ExecArgs) {
   });
 
   logger.info('Seeding fulfillment data...');
-  const { result: shippingProfileResult } =
-    await createShippingProfilesWorkflow(container).run({
-      input: {
-        data: [
-          {
-            name: 'Default',
-            type: 'default',
-          },
-        ],
-      },
-    });
-  const shippingProfile = shippingProfileResult[0];
+  
+  // Check if shipping profiles already exist
+  const existingShippingProfiles = await container.resolve(Modules.FULFILLMENT).listShippingProfiles();
+  
+  let shippingProfile;
+  if (existingShippingProfiles.length === 0) {
+    const { result: shippingProfileResult } =
+      await createShippingProfilesWorkflow(container).run({
+        input: {
+          data: [
+            {
+              name: 'Default',
+              type: 'default',
+            },
+          ],
+        },
+      });
+    shippingProfile = shippingProfileResult[0];
+    logger.info('Created new shipping profile.');
+  } else {
+    shippingProfile = existingShippingProfiles[0];
+    logger.info('Using existing shipping profile.');
+  }
 
-  const fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-    name: 'European Warehouse delivery',
-    type: 'shipping',
-    service_zones: [
-      {
-        name: 'Europe',
-        geo_zones: [
-          {
-            country_code: 'hr',
-            type: 'country',
-          },
-          {
-            country_code: 'gb',
-            type: 'country',
-          },
-          {
-            country_code: 'de',
-            type: 'country',
-          },
-          {
-            country_code: 'dk',
-            type: 'country',
-          },
-          {
-            country_code: 'se',
-            type: 'country',
-          },
-          {
-            country_code: 'fr',
-            type: 'country',
-          },
-          {
-            country_code: 'es',
-            type: 'country',
-          },
-          {
-            country_code: 'it',
-            type: 'country',
-          },
-        ],
-      },
-    ],
-  });
+  // Check if fulfillment sets already exist
+  const existingFulfillmentSets = await fulfillmentModuleService.listFulfillmentSets({});
+  
+  let fulfillmentSet;
+  if (existingFulfillmentSets.length === 0) {
+    fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
+      name: 'European Warehouse delivery',
+      type: 'shipping',
+      service_zones: [
+        {
+          name: 'Europe',
+          geo_zones: [
+            {
+              country_code: 'hr',
+              type: 'country',
+            },
+            {
+              country_code: 'gb',
+              type: 'country',
+            },
+            {
+              country_code: 'de',
+              type: 'country',
+            },
+            {
+              country_code: 'dk',
+              type: 'country',
+            },
+            {
+              country_code: 'se',
+              type: 'country',
+            },
+            {
+              country_code: 'fr',
+              type: 'country',
+            },
+            {
+              country_code: 'es',
+              type: 'country',
+            },
+            {
+              country_code: 'it',
+              type: 'country',
+            },
+          ],
+        },
+      ],
+    });
+    logger.info('Created new fulfillment set.');
+  } else {
+    fulfillmentSet = existingFulfillmentSets[0];
+    logger.info('Using existing fulfillment set.');
+  }
 
   await remoteLink.create({
     [Modules.STOCK_LOCATION]: {
@@ -403,20 +435,31 @@ export default async function seedDemoData({ container }: ExecArgs) {
   logger.info('Finished seeding stock location data.');
 
   logger.info('Seeding publishable API key data...');
-  const { result: publishableApiKeyResult } = await createApiKeysWorkflow(
-    container,
-  ).run({
-    input: {
-      api_keys: [
-        {
-          title: 'Webshop',
-          type: 'publishable',
-          created_by: '',
-        },
-      ],
-    },
-  });
-  const publishableApiKey = publishableApiKeyResult[0];
+  
+  // Check if API keys already exist
+  const existingApiKeys = await container.resolve(Modules.API_KEY).listApiKeys({});
+  
+  let publishableApiKey;
+  if (existingApiKeys.length === 0) {
+    const { result: publishableApiKeyResult } = await createApiKeysWorkflow(
+      container,
+    ).run({
+      input: {
+        api_keys: [
+          {
+            title: 'Webshop',
+            type: 'publishable',
+            created_by: '',
+          },
+        ],
+      },
+    });
+    publishableApiKey = publishableApiKeyResult[0];
+    logger.info('Created new API key.');
+  } else {
+    publishableApiKey = existingApiKeys[0];
+    logger.info('Using existing API key.');
+  }
 
   await linkSalesChannelsToApiKeyWorkflow(container).run({
     input: {
@@ -428,26 +471,36 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
   logger.info('Seeding product data...');
 
-  const { result: categoryResult } = await createProductCategoriesWorkflow(
-    container,
-  ).run({
-    input: {
-      product_categories: [
-        {
-          name: 'One seater',
-          is_active: true,
-        },
-        {
-          name: 'Two seater',
-          is_active: true,
-        },
-        {
-          name: 'Three seater',
-          is_active: true,
-        },
-      ],
-    },
-  });
+  // Check if product categories already exist
+  const existingCategories = await container.resolve(Modules.PRODUCT).listProductCategories({});
+  
+  let categoryResult;
+  if (existingCategories.length === 0) {
+    categoryResult = await createProductCategoriesWorkflow(
+      container,
+    ).run({
+      input: {
+        product_categories: [
+          {
+            name: 'One seater',
+            is_active: true,
+          },
+          {
+            name: 'Two seater',
+            is_active: true,
+          },
+          {
+            name: 'Three seater',
+            is_active: true,
+          },
+        ],
+      },
+    });
+    logger.info('Created new product categories.');
+  } else {
+    categoryResult = { result: existingCategories };
+    logger.info('Using existing product categories.');
+  }
 
   const [sofasImage, armChairsImage] = await uploadFilesWorkflow(container)
     .run({
@@ -474,26 +527,36 @@ export default async function seedDemoData({ container }: ExecArgs) {
     })
     .then((res) => res.result);
 
-  const { result: productTypes } = await createProductTypesWorkflow(
-    container,
-  ).run({
-    input: {
-      product_types: [
-        {
-          value: 'Sofas',
-          metadata: {
-            image: sofasImage,
+  // Check if product types already exist
+  const existingProductTypes = await container.resolve(Modules.PRODUCT).listProductTypes({});
+  
+  let productTypes;
+  if (existingProductTypes.length === 0) {
+    productTypes = await createProductTypesWorkflow(
+      container,
+    ).run({
+      input: {
+        product_types: [
+          {
+            value: 'Sofas',
+            metadata: {
+              image: sofasImage,
+            },
           },
-        },
-        {
-          value: 'Arm Chairs',
-          metadata: {
-            image: armChairsImage,
+          {
+            value: 'Arm Chairs',
+            metadata: {
+              image: armChairsImage,
+            },
           },
-        },
-      ],
-    },
-  });
+        ],
+      },
+    });
+    logger.info('Created new product types.');
+  } else {
+    productTypes = { result: existingProductTypes };
+    logger.info('Using existing product types.');
+  }
 
   const [
     scandinavianSimplicityImage,

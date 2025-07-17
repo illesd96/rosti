@@ -31,8 +31,6 @@ services:
         value: https://your-admin-url.com
       - key: AUTH_CORS
         value: https://your-storefront-url.com
-      - key: DISABLE_ADMIN
-        value: false
 
 databases:
   - name: medusa-postgres

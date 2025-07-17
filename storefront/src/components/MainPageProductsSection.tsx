@@ -1,4 +1,4 @@
-import { Suspense } from "react"
+
 import { getCollectionByHandle } from "@lib/data/collections"
 import { getProductsList } from "@lib/data/products"
 import ProductPreview from "@modules/products/components/product-preview"

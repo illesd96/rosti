@@ -4,7 +4,6 @@ import { getRegion } from "@lib/data/regions"
 import MainPageProductsSection from "@/components/MainPageProductsSection"
 import { Layout, LayoutColumn } from "@/components/Layout"
 import { LocalizedLink } from "@/components/LocalizedLink"
-import { CollectionsSection } from "@/components/CollectionsSection"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",

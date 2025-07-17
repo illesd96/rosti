@@ -22,7 +22,7 @@ services:
       - key: COOKIE_SECRET
         generateValue: true
       - key: BACKEND_URL
-        value: https://rosti-backend.onrender.com/
+        value: https://your-app-name.onrender.com
       - key: STOREFRONT_URL
         value: https://your-storefront-url.com
       - key: STORE_CORS

@@ -3,7 +3,7 @@ services:
     name: medusa-backend
     env: node
     plan: free
-    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate && yarn medusa build
+    buildCommand: corepack enable && yarn install && yarn build && yarn medusa db:migrate --skip-seed && yarn medusa build
     startCommand: medusa start --skip-seed
     envVars:
       - key: NODE_ENV
@@ -31,6 +31,18 @@ services:
         value: https://your-admin-url.com
       - key: AUTH_CORS
         value: https://your-storefront-url.com
+      - key: S3_FILE_URL
+        value: https://caf2520911d2089f7451d31c9bd5ec6d.r2.cloudflarestorage.com/rosti
+      - key: S3_ACCESS_KEY_ID
+        value: 2410420ad1d40abff4d72ffd90d4896a
+      - key: S3_SECRET_ACCESS_KEY
+        value: f9132a39c48fcd4affda2dea1532ef88bf2cc2792c1a6f32546904aba13e381
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        value: rosti
+      - key: S3_ENDPOINT
+        value: https://caf2520911d2089f7451d31c9bd5ec6d.r2.cloudflarestorage.com
 
 databases:
   - name: medusa-postgres

@@ -54,6 +54,8 @@ module.exports = defineConfig({
                additional_client_config: {
                  forcePathStyle: true,
                  signatureVersion: 'v4',
+                 s3ForcePathStyle: true,
+                 s3BucketEndpoint: false,
                },
              },
            },

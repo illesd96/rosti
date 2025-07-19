@@ -21,6 +21,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "fashion-starter-demo.s3.eu-central-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "caf2520911d2089f7451d31c9bd5ec6d.r2.cloudflarestorage.com",
+      },
     ],
   },
 }

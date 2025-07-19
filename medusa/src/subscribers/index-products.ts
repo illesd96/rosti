@@ -10,9 +10,15 @@ export default async function indexProductHandler({
 
   const logger = container.resolve('logger');
   const productModuleService = container.resolve(Modules.PRODUCT);
-  const meilisearchService = container.resolve(
-    'meilisearchService',
-  ) as ISearchService;
+  
+  // Check if meilisearchService is available
+  let meilisearchService: ISearchService | null = null;
+  try {
+    meilisearchService = container.resolve('meilisearchService') as ISearchService;
+  } catch (error) {
+    logger.warn('MeiliSearch service not available, skipping product indexing');
+    return;
+  }
 
   if (name === 'product.deleted') {
     await meilisearchService.deleteDocument('products', productId);
